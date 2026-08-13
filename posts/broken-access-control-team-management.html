@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Broken Access Control in Team Management | Omar Mesalam</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>Omar Mesalam</h1>
+
+        <p>Cybersecurity Enthusiast & Penetration Tester</p>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../blog.html">Blog</a>
+            <a href="../about.html">About</a>
+            <a href="https://github.com/Mesalam-340">GitHub</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <article>
+
+            <h2>
+                Broken Access Control in Team Management
+                Leads to Unauthorized Admin Access
+            </h2>
+
+            <div class="date">
+                January 8, 2026 · 2 min read · Omar Mesalam
+            </div>
+
+
+            <p>
+                While testing the Teams functionality of a web application,
+                I discovered a Broken Access Control issue that could allow
+                an invited user to obtain administrative privileges after
+                the original administrator was removed from the team.
+            </p>
+
+
+            <h2>Overview</h2>
+
+            <p>
+                The issue was related to the handling of pending team
+                invitations when a privileged user was removed from the team.
+            </p>
+
+            <p>
+                The application failed to properly invalidate the existing
+                invitation or re-validate the intended role when the invited
+                user accepted it.
+            </p>
+
+
+            <h2>Steps to Reproduce</h2>
+
+            <ol>
+
+                <li>
+                    Sign up for an account on the target application.
+                </li>
+
+                <li>
+                    Create a team and configure the following roles:
+                    <ul>
+                        <li>Owner</li>
+                        <li>Admin</li>
+                    </ul>
+                </li>
+
+                <li>
+                    From the Admin account, send a team invitation
+                    to a new user who is not currently a member.
+                </li>
+
+                <li>
+                    Do not accept the invitation yet.
+                </li>
+
+                <li>
+                    Log in as the Owner.
+                </li>
+
+                <li>
+                    Remove the Admin account from the team.
+                </li>
+
+                <li>
+                    Log in as the previously invited user.
+                </li>
+
+                <li>
+                    Accept the pending invitation.
+                </li>
+
+            </ol>
+
+
+            <h2>Result</h2>
+
+            <p>
+                The invited user is added to the team with the
+                <strong>Admin</strong> role, even though the original
+                administrator who issued the invitation has already
+                been removed.
+            </p>
+
+            <p>
+                The pending invitation effectively preserved a privileged
+                role that should no longer have been valid.
+            </p>
+
+
+            <h2>Impact</h2>
+
+            <ul>
+
+                <li>
+                    Unauthorized privilege escalation.
+                </li>
+
+                <li>
+                    A user can obtain administrative privileges
+                    without proper authorization.
+                </li>
+
+                <li>
+                    Depending on the application's functionality,
+                    administrative access could allow management of
+                    team members, settings, and sensitive resources.
+                </li>
+
+            </ul>
+
+
+            <h2>Root Cause</h2>
+
+            <p>
+                The primary issue appears to be insufficient server-side
+                authorization validation when processing pending invitations.
+            </p>
+
+            <p>
+                Invitations containing privileged roles were not properly
+                invalidated after the associated administrator was removed
+                from the team.
+            </p>
+
+            <p>
+                The application should not rely solely on the state of the
+                invitation. The server should re-evaluate the authorization
+                context and intended role when the invitation is accepted.
+            </p>
+
+
+            <h2>Recommended Fix</h2>
+
+            <ul>
+
+                <li>
+                    Invalidate pending invitations when the issuer loses
+                    the required privileges.
+                </li>
+
+                <li>
+                    Perform server-side authorization checks when an
+                    invitation is accepted.
+                </li>
+
+                <li>
+                    Re-validate the inviter's permissions and the requested
+                    role before assigning privileges.
+                </li>
+
+                <li>
+                    Avoid trusting previously issued invitations as a
+                    permanent authorization mechanism.
+                </li>
+
+            </ul>
+
+
+            <h2>Conclusion</h2>
+
+            <p>
+                This finding demonstrates how authorization bugs can occur
+                not only through direct role manipulation, but also through
+                inconsistent state between invitations, users, and team roles.
+            </p>
+
+            <p>
+                Testing the complete lifecycle of privileged actions,
+                including invitation creation, user removal, and invitation
+                acceptance, can reveal authorization issues that may not be
+                visible when testing each action individually.
+            </p>
+
+        </article>
+
+    </main>
+
+
+    <footer>
+
+        <a href="../blog.html">← Back to Blog</a>
+
+        <br><br>
+
+        © 2026 Omar Mesalam ·
+
+        <a href="https://github.com/Mesalam-340">
+            GitHub
+        </a>
+
+    </footer>
+
+</div>
+
+</body>
+</html>
