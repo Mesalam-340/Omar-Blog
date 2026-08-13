@@ -1,91 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Omar Mesalam | Cybersecurity</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>Omar Mesalam | Cybersecurity & Writeups</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
-
-    <header>
-
-        <h1>Omar Mesalam</h1>
-
-        <p>Cybersecurity Enthusiast & Penetration Tester</p>
-
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="blog.html">Blog</a>
-            <a href="about.html">About</a>
-            <a href="https://github.com/Mesalam-340">
-                GitHub
-            </a>
-        </nav>
-
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="brand">
+                <a href="#" class="logo">Omar Mosalam</a>
+                <span class="badge">Penetration Tester</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#">Blog</a>
+                <a href="#">About</a>
+                <a href="https://github.com" target="_blank" class="github-btn">GitHub ↗</a>
+            </nav>
+        </div>
     </header>
 
-
-    <main>
-
-        <section class="intro">
-
-            <h2>Security Research & Writeups</h2>
-
-            <p>
-                Welcome to my personal cybersecurity blog.
-                I document penetration testing, security research,
-                CTF writeups, and things I learn through hands-on practice.
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Security Research & Writeups</h1>
+            <p class="hero-subtitle">
+                Welcome to my personal cybersecurity blog. Here I document penetration testing findings, 
+                security research, CTF writeups, and technical insights.
             </p>
+        </div>
+    </section>
 
-        </section>
-
-
-        <section class="posts">
-
+    <!-- Main Content / Posts -->
+    <main class="container">
+        <div class="section-header">
             <h2>Recent Posts</h2>
+            <div class="line"></div>
+        </div>
 
-            <article class="post">
-
-                <h3>
-                    <a href="posts/test-post.html">
-                        My First Blog
-                    </a>
-                </h3>
-
-                <div class="date">
-                    August 13, 2026 · Omar Mesalam
+        <div class="posts-grid">
+            <!-- Article Card 1 -->
+            <article class="post-card">
+                <div class="post-meta">
+                    <span class="date">Aug 13, 2026</span>
+                    <span class="tag">General</span>
                 </div>
-
-                <p>
-                    Welcome to my cybersecurity blog.
-                    This is my first post where I document my cybersecurity journey.
+                <h3 class="post-title"><a href="#">My First Blog</a></h3>
+                <p class="post-excerpt">
+                    Welcome to my cybersecurity blog! This is my first post where I document my journey, setups, and future plans in offensive security.
                 </p>
-
+                <a href="#" class="read-more">Read Article →</a>
             </article>
 
-        </section>
-
+            <!-- Example for future card -->
+            <!-- 
+            <article class="post-card">
+                <div class="post-meta">
+                    <span class="date">Aug 15, 2026</span>
+                    <span class="tag">Web Security</span>
+                </div>
+                <h3 class="post-title"><a href="#">Exploiting IDOR in Web Applications</a></h3>
+                <p class="post-excerpt">
+                    A deep dive into finding and exploiting Insecure Direct Object References with real-world scenarios.
+                </p>
+                <a href="#" class="read-more">Read Article →</a>
+            </article> 
+            -->
+        </div>
     </main>
 
-
-    <footer>
-
-        © 2026 Omar Mesalam ·
-
-        <a href="https://github.com/Mesalam-340">
-            GitHub
-        </a>
-
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>© 2026 Omar Mosalam. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Twitter/X</a>
+            </div>
+        </div>
     </footer>
-
-</div>
 
 </body>
 </html>
