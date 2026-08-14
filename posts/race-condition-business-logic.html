@@ -252,13 +252,13 @@
                 <p>During the reporting phase, I encountered a common hurdle in Bug Bounty programs: the Scope and Exclusions policy. While the second bug (Subscription Bypass) was explicitly excluded under product feature usage limits, the first bug remained a gray area that demonstrated a significant security impact beyond mere limits</p>
 
                 <div class="img-container">
-                    <img src="images/race-condition-4.png" alt="Proof of Concept Image 4">
+                    <img src="images/race-condition-8.png" alt="Proof of Concept Image 4">
                 </div>
 
                 <p>So, this means that if you use the Race Condition technique to bypass a numerical limit (such as adding more members than allowed, or unlocking paid features for free), this is completely excluded from rewards. The company considers this type of vulnerability to be known to them and not a security risk to other users’ data; it’s simply a “manipulation” of the free or paid version’s limitations.</p>
 
                 <div class="conclusion-box">
-                    <h2>Why is the “Group Duplication” vulnerability different?</h2>
+                    <p>Why is the “Group Duplication” vulnerability different?</p>
                     <p>Based on this text:</p>
                     <p>The Member Bug (Bug 2) falls directly under this category because it exceeds the “Feature usage limit” (the 5-member limit). Therefore, it’s excluded.</p>
                     <p>The Group Duplication Bug (Bug 1): If you present it as “I was able to create more than one group with the same name,” there’s a high probability it will be rejected, and I have a feeling they will anyway 😂. However, if you present it as a “Broken Access Control” because you lost control over members and their permissions, then you’re moving from the realm of “numerical limitations” to the realm of “security logic errors</p>
