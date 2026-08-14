@@ -213,6 +213,9 @@
 </div>
                 <p>However, I found that the site did not allow that, so it occurred to me why not try the race condition on this endpoint?</p>
                 <p>And it has already succeeded ✅</p>
+                <div class="img-container">
+    <img src="images/race-condition-3.png" alt="Sending parallel requests in Repeater">
+</div>
                 <p>But I wondered how this might affect other users, as I found that these groups are created with the same name but with a different ID for each group.</p>
                 <p>I discovered that I couldn’t edit this group due to name duplication, so I deleted the existing groups and created new ones with the same name but with different users having admin privileges. I found that if there are multiple groups with the same name and members, I can never edit the group, even though I own it, and I can’t reduce their privileges or control them.</p>
 
