@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Condition Leading to Business Logic Flaws | Omar Mesalam</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #12161f;
+            --card-bg: rgba(22, 28, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --font-code: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            background: rgba(18, 22, 31, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-code);
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo-accent { color: var(--accent-green); }
+
+        .back-btn {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+        }
+
+        .article-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .article-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .article-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-family: var(--font-code);
+            display: flex;
+            gap: 15px;
+        }
+
+        .badge { color: var(--accent-green); }
+
+        .article-body h2 {
+            font-size: 1.3rem;
+            font-family: var(--font-code);
+            color: var(--accent-green);
+            margin: 35px 0 15px 0;
+        }
+
+        .article-body p {
+            color: #cbd5e1;
+            font-size: 0.98rem;
+            margin-bottom: 16px;
+        }
+
+        .article-body ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .article-body li { margin-bottom: 8px; }
+
+        /* Formatting Images */
+        .img-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .img-caption {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-top: 8px;
+            font-family: var(--font-code);
+        }
+
+        code {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-code);
+        }
+
+        @media (max-width: 600px) {
+            .article-box { padding: 20px; }
+            .article-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo"><span class="logo-accent">&gt;</span> Omar Mesalam_</a>
+            <a href="../index.html" class="back-btn">&larr; Back to Writeups</a>
+        </div>
+    </header>
+
+    <div class="article-container">
+        <article class="article-box">
+            
+            <header class="article-header">
+                <h1 class="article-title">How Race Condition Leading to Business Logic Flaws Affecting Features</h1>
+                <div class="article-meta">
+                    <span class="badge">[Web Security]</span>
+                    <span>Mar 2, 2026</span>
+                    <span>• 4 min read</span>
+                </div>
+            </header>
+
+            <div class="article-body">
+                <p><strong>Impact Focus:</strong> Group uniqueness validation &amp; Subscription enforcement limits.</p>
+
+                <h2><i class="fa-solid fa-bug"></i> The First Bug: Group Duplication &amp; Denial of Control</h2>
+                <p>While browsing the website, I noticed a feature for creating groups and decided to test its logic. After creating a group, I tried creating another group with the exact same name.</p>
+                <p>The application blocked this action. Naturally, I decided to test for a Race Condition on the creation endpoint. Sending parallel requests succeeded! ✅</p>
+                <p>While each group received a unique ID, creating duplicate group names triggered an unexpected business logic error. I discovered that I couldn’t edit any group with duplicate names. Even as the owner, I couldn't reduce member privileges or manage settings—effectively losing administrative control over my own groups.</p>
+
+                <h2><i class="fa-solid fa-bug"></i> Second Bug: Bypassing Subscription Member Limits</h2>
+                <p>Since one endpoint was vulnerable to race conditions, I tested others. I focused on the endpoint responsible for adding team members.</p>
+                
+                <p>The free tier allowed a maximum of 5 members. Attempting to add a 6th member was properly rejected by the UI and API.</p>
+
+                <div class="img-container">
+                    <img src="images/race-condition-1.png" alt="Member limit rejection">
+                    <p class="img-caption">Figure 1: Application rejecting the 6th member under normal conditions</p>
+                </div>
+
+                <p>Using Burp Suite's Repeater (Send in parallel / Turbo Intruder), I performed a race condition attack while sending invitations to exceed the limit.</p>
+
+                <div class="img-container">
+                    <img src="images/race-condition-2.png" alt="Parallel requests in Burp Suite">
+                    <p class="img-caption">Figure 2: Sending parallel invitation requests via Burp Suite</p>
+                </div>
+
+                <p>It succeeded! ✅ I was able to invite more than 5 members, completely bypassing the subscription limit.</p>
+
+                <div class="img-container">
+                    <img src="images/race-condition-3.png" alt="Successful limit bypass">
+                    <p class="img-caption">Figure 3: Successfully adding members beyond the allowed limit</p>
+                </div>
+
+                <h2><i class="fa-solid fa-shield-halved"></i> Bug Bounty Insight: Impact vs. Exclusions</h2>
+                <p>During reporting, I faced a common hurdle: Scope and Exclusions policies. The <strong>Subscription Bypass (Bug 2)</strong> was marked as an exclusion under <em>"product feature usage limits"</em>. Bypassing numerical limits is often treated as a known limitation rather than a security risk to user data.</p>
+
+                <div class="img-container">
+                    <img src="images/race-condition-4.png" alt="Program exclusion details">
+                    <p class="img-caption">Figure 4: Bug Bounty policy regarding feature usage limits</p>
+                </div>
+
+                <h2><i class="fa-solid fa-key"></i> Key Takeaway</h2>
+                <ul>
+                    <li><strong>Member Bug (Bug 2):</strong> Pure usage limit bypass &rarr; <em>High chance of Informational / Out of Scope</em>.</li>
+                    <li><strong>Group Duplication (Bug 1):</strong> If framed only as "duplicate names", it gets rejected. But when framed as <strong>Broken Access Control</strong> (loss of admin control over privileges), it moves from a "rate limit" issue to a critical logic error!</li>
+                </ul>
+            </div>
+
+        </article>
+    </div>
+
+</body>
+</html>
