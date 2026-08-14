@@ -307,7 +307,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 42.25 seconds</div>
 
-                <p>we now have a nice information to start the attacks<br>now lets open Burpsuite to record everything while we open http<br>But after that we need to run some enumerations for this port<br>The First Thing :<br><code>gobuster dir -u http://10.67.166.123 -w /usr/share/seclists/Discovery/Web-Content/common.txt</code><br>The second :<br><code>dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json</code><br>and i use it to understand the website</p>
+                <p>we now have a nice information to start the attacks<br>now lets open Burpsuite to record everything while we open http<br>But after that we need to run some enumerations for this port<b>The First Thing :<b><code>gobuster dir -u http://10.67.166.123 -w /usr/share/seclists/Discovery/Web-Content/common.txt</code><br>The second :<br><code>dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json</code><br>and i use it to understand the website</p>
 
                 <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 
