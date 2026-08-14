@@ -1,234 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broken Access Control | Omar Mesalam</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #12161f;
+            --card-bg: rgba(22, 28, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --font-code: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
 
-    <title>Broken Access Control in Team Management | Omar Mesalam</title>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <link rel="stylesheet" href="../css/style.css">
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            padding-bottom: 60px;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            background: rgba(18, 22, 31, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-code);
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo-accent { color: var(--accent-green); }
+
+        .back-btn {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover { opacity: 0.8; }
+
+        /* Article Wrapper */
+        .article-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .article-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        /* Header */
+        .article-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-family: var(--font-code);
+            display: flex;
+            gap: 15px;
+        }
+
+        .badge { color: var(--accent-green); }
+
+        /* Body Content Formatting */
+        .article-body h2 {
+            font-size: 1.25rem;
+            font-family: var(--font-code);
+            color: var(--accent-green);
+            margin: 30px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .article-body p {
+            color: #cbd5e1;
+            font-size: 0.98rem;
+            margin-bottom: 16px;
+        }
+
+        /* Lists formatting */
+        .article-body ol, .article-body ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .article-body li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .sub-list {
+            margin-top: 6px;
+            margin-bottom: 6px !important;
+            margin-left: 20px;
+        }
+
+        .sub-list li {
+            color: var(--accent-green);
+            font-family: var(--font-code);
+        }
+
+        /* Highlights */
+        code {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 600px) {
+            .article-box { padding: 20px; }
+            .article-title { font-size: 1.4rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-
-    <header>
-
-        <h1>Omar Mesalam</h1>
-
-        <p>Cybersecurity Enthusiast & Penetration Tester</p>
-
-        <nav>
-            <a href="../index.html">Home</a>
-            <a href="../blog.html">Blog</a>
-            <a href="../about.html">About</a>
-            <a href="https://github.com/Mesalam-340">GitHub</a>
-        </nav>
-
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo"><span class="logo-accent">&gt;</span> Omar Mesalam_</a>
+            <a href="../index.html" class="back-btn">&larr; Back to Writeups</a>
+        </div>
     </header>
 
+    <div class="article-container">
+        <article class="article-box">
+            
+            <header class="article-header">
+                <h1 class="article-title">Broken Access Control in Team Management Leads to Unauthorized Admin Access</h1>
+                <div class="article-meta">
+                    <span class="badge">[Web Security]</span>
+                    <span>Jan 8, 2026</span>
+                    <span>• 2 min read</span>
+                </div>
+            </header>
 
-    <main>
+            <div class="article-body">
+                <p>While testing the Teams functionality of a web application, I discovered a Broken Access Control issue that could allow an invited user to obtain administrative privileges after the original administrator was removed from the team.</p>
 
-        <article>
+                <h2><i class="fa-solid fa-terminal"></i> Overview</h2>
+                <p>The issue was related to the handling of pending team invitations when a privileged user was removed from the team.</p>
+                <p>The application failed to properly invalidate the existing invitation or re-validate the intended role when the invited user accepted it.</p>
 
-            <h2>
-                Broken Access Control in Team Management
-                Leads to Unauthorized Admin Access
-            </h2>
+                <h2><i class="fa-solid fa-terminal"></i> Steps to Reproduce</h2>
+                <ol>
+                    <li>Sign up for an account on the target application.</li>
+                    <li>Create a team and configure the following roles:
+                        <ul class="sub-list">
+                            <li>Owner</li>
+                            <li>Admin</li>
+                        </ul>
+                    </li>
+                    <li>From the Admin account, send a team invitation to a new user who is not currently a member.</li>
+                    <li>Do not accept the invitation yet.</li>
+                    <li>Log in as the Owner.</li>
+                    <li>Remove the Admin account from the team.</li>
+                    <li>Log in as the previously invited user.</li>
+                    <li>Accept the pending invitation.</li>
+                </ol>
 
-            <div class="date">
-                January 8, 2026 · 2 min read · Omar Mesalam
+                <h2><i class="fa-solid fa-terminal"></i> Result</h2>
+                <p>The invited user is added to the team with the <code>Admin</code> role, even though the original administrator who issued the invitation has already been removed.</p>
+                <p>The pending invitation effectively preserved a privileged role that should no longer have been valid.</p>
+
+                <h2><i class="fa-solid fa-terminal"></i> Impact</h2>
+                <ul>
+                    <li>Unauthorized privilege escalation.</li>
+                    <li>A user can obtain administrative privileges without proper authorization.</li>
+                    <li>Depending on the application's functionality, administrative access could allow management of team members, settings, and sensitive resources.</li>
+                </ul>
+
+                <h2><i class="fa-solid fa-terminal"></i> Root Cause</h2>
+                <p>The primary issue appears to be insufficient server-side authorization validation when processing pending invitations.</p>
+                <p>Invitations containing privileged roles were not properly invalidated after the associated administrator was removed from the team.</p>
+                <p>The application should not rely solely on the state of the invitation. The server should re-evaluate the authorization context and intended role when the invitation is accepted.</p>
+
+                <h2><i class="fa-solid fa-terminal"></i> Recommended Fix</h2>
+                <ul>
+                    <li>Invalidate pending invitations when the issuer loses the required privileges.</li>
+                    <li>Perform server-side authorization checks when an invitation is accepted.</li>
+                    <li>Re-validate the inviter's permissions and the requested role before assigning privileges.</li>
+                    <li>Avoid trusting previously issued invitations as a permanent authorization mechanism.</li>
+                </ul>
+
+                <h2><i class="fa-solid fa-terminal"></i> Conclusion</h2>
+                <p>This finding demonstrates how authorization bugs can occur not only through direct role manipulation, but also through inconsistent state between invitations, users, and team roles.</p>
+                <p>Testing the complete lifecycle of privileged actions, including invitation creation, user removal, and invitation acceptance, can reveal authorization issues that may not be visible when testing each action individually.</p>
             </div>
 
-
-            <p>
-                While testing the Teams functionality of a web application,
-                I discovered a Broken Access Control issue that could allow
-                an invited user to obtain administrative privileges after
-                the original administrator was removed from the team.
-            </p>
-
-
-            <h2>Overview</h2>
-
-            <p>
-                The issue was related to the handling of pending team
-                invitations when a privileged user was removed from the team.
-            </p>
-
-            <p>
-                The application failed to properly invalidate the existing
-                invitation or re-validate the intended role when the invited
-                user accepted it.
-            </p>
-
-
-            <h2>Steps to Reproduce</h2>
-
-            <ol>
-
-                <li>
-                    Sign up for an account on the target application.
-                </li>
-
-                <li>
-                    Create a team and configure the following roles:
-                    <ul>
-                        <li>Owner</li>
-                        <li>Admin</li>
-                    </ul>
-                </li>
-
-                <li>
-                    From the Admin account, send a team invitation
-                    to a new user who is not currently a member.
-                </li>
-
-                <li>
-                    Do not accept the invitation yet.
-                </li>
-
-                <li>
-                    Log in as the Owner.
-                </li>
-
-                <li>
-                    Remove the Admin account from the team.
-                </li>
-
-                <li>
-                    Log in as the previously invited user.
-                </li>
-
-                <li>
-                    Accept the pending invitation.
-                </li>
-
-            </ol>
-
-
-            <h2>Result</h2>
-
-            <p>
-                The invited user is added to the team with the
-                <strong>Admin</strong> role, even though the original
-                administrator who issued the invitation has already
-                been removed.
-            </p>
-
-            <p>
-                The pending invitation effectively preserved a privileged
-                role that should no longer have been valid.
-            </p>
-
-
-            <h2>Impact</h2>
-
-            <ul>
-
-                <li>
-                    Unauthorized privilege escalation.
-                </li>
-
-                <li>
-                    A user can obtain administrative privileges
-                    without proper authorization.
-                </li>
-
-                <li>
-                    Depending on the application's functionality,
-                    administrative access could allow management of
-                    team members, settings, and sensitive resources.
-                </li>
-
-            </ul>
-
-
-            <h2>Root Cause</h2>
-
-            <p>
-                The primary issue appears to be insufficient server-side
-                authorization validation when processing pending invitations.
-            </p>
-
-            <p>
-                Invitations containing privileged roles were not properly
-                invalidated after the associated administrator was removed
-                from the team.
-            </p>
-
-            <p>
-                The application should not rely solely on the state of the
-                invitation. The server should re-evaluate the authorization
-                context and intended role when the invitation is accepted.
-            </p>
-
-
-            <h2>Recommended Fix</h2>
-
-            <ul>
-
-                <li>
-                    Invalidate pending invitations when the issuer loses
-                    the required privileges.
-                </li>
-
-                <li>
-                    Perform server-side authorization checks when an
-                    invitation is accepted.
-                </li>
-
-                <li>
-                    Re-validate the inviter's permissions and the requested
-                    role before assigning privileges.
-                </li>
-
-                <li>
-                    Avoid trusting previously issued invitations as a
-                    permanent authorization mechanism.
-                </li>
-
-            </ul>
-
-
-            <h2>Conclusion</h2>
-
-            <p>
-                This finding demonstrates how authorization bugs can occur
-                not only through direct role manipulation, but also through
-                inconsistent state between invitations, users, and team roles.
-            </p>
-
-            <p>
-                Testing the complete lifecycle of privileged actions,
-                including invitation creation, user removal, and invitation
-                acceptance, can reveal authorization issues that may not be
-                visible when testing each action individually.
-            </p>
-
         </article>
-
-    </main>
-
-
-    <footer>
-
-        <a href="../blog.html">← Back to Blog</a>
-
-        <br><br>
-
-        © 2026 Omar Mesalam ·
-
-        <a href="https://github.com/Mesalam-340">
-            GitHub
-        </a>
-
-    </footer>
-
-</div>
+    </div>
 
 </body>
 </html>
