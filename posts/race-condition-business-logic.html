@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Race Condition Leading to Business Logic Flaws | Omar Mesalam</title>
+    <title>How Race Condition Leading to Business Logic Flaws | Omar Mesalam</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -100,21 +100,49 @@
             font-family: var(--font-code);
             display: flex;
             gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .badge { color: var(--accent-green); }
+
+        .impact-highlights {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 4px solid var(--accent-green);
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .impact-highlights ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .impact-highlights li {
+            font-family: var(--font-code);
+            font-size: 0.93rem;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .impact-highlights li:last-child { margin-bottom: 0; }
 
         .article-body h2 {
             font-size: 1.3rem;
             font-family: var(--font-code);
             color: var(--accent-green);
             margin: 35px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .article-body p {
             color: #cbd5e1;
             font-size: 0.98rem;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .article-body ul {
@@ -125,24 +153,26 @@
 
         .article-body li { margin-bottom: 8px; }
 
-        /* Formatting Images */
+        /* Images Container */
         .img-container {
-            margin: 25px 0;
+            margin: 30px 0;
             text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
 
         .img-container img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border-radius: 6px;
         }
 
         .img-caption {
             font-size: 0.85rem;
             color: var(--text-sub);
-            margin-top: 8px;
+            margin-top: 10px;
             font-family: var(--font-code);
         }
 
@@ -152,6 +182,15 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-family: var(--font-code);
+            font-size: 0.9rem;
+        }
+
+        .conclusion-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
         }
 
         @media (max-width: 600px) {
@@ -176,56 +215,75 @@
                 <h1 class="article-title">How Race Condition Leading to Business Logic Flaws Affecting Features</h1>
                 <div class="article-meta">
                     <span class="badge">[Web Security]</span>
-                    <span>Mar 2, 2026</span>
+                    <span>Mesalam_17</span>
+                    <span>• Mar 2, 2026</span>
                     <span>• 4 min read</span>
+                </div>
+
+                <div class="impact-highlights">
+                    <ul>
+                        <li>— Group uniqueness validation</li>
+                        <li>— Subscription enforcement limits</li>
+                    </ul>
                 </div>
             </header>
 
             <div class="article-body">
-                <p><strong>Impact Focus:</strong> Group uniqueness validation &amp; Subscription enforcement limits.</p>
-
-                <h2><i class="fa-solid fa-bug"></i> The First Bug: Group Duplication &amp; Denial of Control</h2>
-                <p>While browsing the website, I noticed a feature for creating groups and decided to test its logic. After creating a group, I tried creating another group with the exact same name.</p>
-                <p>The application blocked this action. Naturally, I decided to test for a Race Condition on the creation endpoint. Sending parallel requests succeeded! ✅</p>
-                <p>While each group received a unique ID, creating duplicate group names triggered an unexpected business logic error. I discovered that I couldn’t edit any group with duplicate names. Even as the owner, I couldn't reduce member privileges or manage settings—effectively losing administrative control over my own groups.</p>
-
-                <h2><i class="fa-solid fa-bug"></i> Second Bug: Bypassing Subscription Member Limits</h2>
-                <p>Since one endpoint was vulnerable to race conditions, I tested others. I focused on the endpoint responsible for adding team members.</p>
                 
-                <p>The free tier allowed a maximum of 5 members. Attempting to add a 6th member was properly rejected by the UI and API.</p>
+                <h2><i class="fa-solid fa-bug"></i> The First Bug 🐞</h2>
+                <p>While browsing the website, I noticed a feature for creating groups and decided to create one.</p>
+                <p>After that, I decided to create another group with the same name.</p>
+                <p>However, I found that the site did not allow that, so it occurred to me: why not try the race condition on this endpoint?</p>
+                <p>And it has already succeeded ✅</p>
+                <p>But I wondered how this might affect other users, as I found that these groups are created with the same name but with a different ID for each group.</p>
+                <p>I discovered that I couldn’t edit this group due to name duplication, so I deleted the existing groups and created new ones with the same name but with different users having admin privileges. I found that if there are multiple groups with the same name and members, I can never edit the group, even though I own it, and I can’t reduce their privileges or control them.</p>
+
+                <h2><i class="fa-solid fa-bug"></i> Second Bug 🐞</h2>
+                <p>I reasoned that since one endpoint was vulnerable to the race condition, there could be other endpoints with the same vulnerability. I tried checking multiple endpoints but found nothing, but something caught my eye.</p>
+                
+                <p>Why can’t I run a test on the endpoint that allows me to add members? Initially, I need to test adding more than five members without any procedures, but when I tried to add the sixth person, it was rejected.</p>
 
                 <div class="img-container">
-                    <img src="images/race-condition-1.png" alt="Member limit rejection">
-                    <p class="img-caption">Figure 1: Application rejecting the 6th member under normal conditions</p>
+                    <img src="images/race-condition-1.png" alt="Rejection of adding sixth member">
+                    <p class="img-caption">Figure 1: Application rejecting the 6th member limit</p>
                 </div>
 
-                <p>Using Burp Suite's Repeater (Send in parallel / Turbo Intruder), I performed a race condition attack while sending invitations to exceed the limit.</p>
+                <p>Here I decided to conduct a test of sending invitations to more than five members using the repeater.</p>
 
                 <div class="img-container">
-                    <img src="images/race-condition-2.png" alt="Parallel requests in Burp Suite">
-                    <p class="img-caption">Figure 2: Sending parallel invitation requests via Burp Suite</p>
+                    <img src="images/race-condition-2.png" alt="Sending parallel requests in Repeater">
+                    <p class="img-caption">Figure 2: Sending parallel invitation requests in Repeater</p>
                 </div>
 
-                <p>It succeeded! ✅ I was able to invite more than 5 members, completely bypassing the subscription limit.</p>
+                <p>And it has already succeeded ✅</p>
 
                 <div class="img-container">
-                    <img src="images/race-condition-3.png" alt="Successful limit bypass">
-                    <p class="img-caption">Figure 3: Successfully adding members beyond the allowed limit</p>
+                    <img src="images/race-condition-3.png" alt="Successfully adding members">
+                    <p class="img-caption">Figure 3: Successfully bypassing the 5-member limit</p>
                 </div>
 
-                <h2><i class="fa-solid fa-shield-halved"></i> Bug Bounty Insight: Impact vs. Exclusions</h2>
-                <p>During reporting, I faced a common hurdle: Scope and Exclusions policies. The <strong>Subscription Bypass (Bug 2)</strong> was marked as an exclusion under <em>"product feature usage limits"</em>. Bypassing numerical limits is often treated as a known limitation rather than a security risk to user data.</p>
+                <h2><i class="fa-solid fa-shield-cat"></i> Bug Bounty Reporting &amp; Policy Hurdles</h2>
+                <p>Of course, as we all know, nothing good lasts forever 😂</p>
+                <p>During the reporting phase, I encountered a common hurdle in Bug Bounty programs: the Scope and Exclusions policy. While the second bug (Subscription Bypass) was explicitly excluded under product feature usage limits, the first bug remained a gray area that demonstrated a significant security impact beyond mere limits.</p>
 
                 <div class="img-container">
-                    <img src="images/race-condition-4.png" alt="Program exclusion details">
-                    <p class="img-caption">Figure 4: Bug Bounty policy regarding feature usage limits</p>
+                    <img src="images/race-condition-4.png" alt="Scope and Exclusions Policy">
+                    <p class="img-caption">Figure 4: Exclusions policy regarding feature usage limits</p>
                 </div>
 
-                <h2><i class="fa-solid fa-key"></i> Key Takeaway</h2>
-                <ul>
-                    <li><strong>Member Bug (Bug 2):</strong> Pure usage limit bypass &rarr; <em>High chance of Informational / Out of Scope</em>.</li>
-                    <li><strong>Group Duplication (Bug 1):</strong> If framed only as "duplicate names", it gets rejected. But when framed as <strong>Broken Access Control</strong> (loss of admin control over privileges), it moves from a "rate limit" issue to a critical logic error!</li>
-                </ul>
+                <p>So, this means that if you use the Race Condition technique to bypass a numerical limit (such as adding more members than allowed, or unlocking paid features for free), this is completely excluded from rewards. The company considers this type of vulnerability to be known to them and not a security risk to other users’ data; it’s simply a “manipulation” of the free or paid version’s limitations.</p>
+
+                <div class="conclusion-box">
+                    <h2><i class="fa-solid fa-lightbulb"></i> Why is the “Group Duplication” vulnerability different?</h2>
+                    <p>Based on this text:</p>
+                    <ul>
+                        <li><strong>The Member Bug (Bug 2):</strong> Falls directly under this category because it exceeds the “Feature usage limit” (the 5-member limit). Therefore, it’s excluded.</li>
+                        <li><strong>The Group Duplication Bug (Bug 1):</strong> If you present it as <em>“I was able to create more than one group with the same name,”</em> there’s a high probability it will be rejected, and I have a feeling they will anyway 😂. However, if you present it as a <strong>“Broken Access Control”</strong> because you lost control over members and their permissions, then you’re moving from the realm of “numerical limitations” to the realm of “security logic errors”.</li>
+                    </ul>
+                </div>
+
+                <p style="margin-top: 30px; font-weight: bold; font-family: var(--font-code); color: var(--accent-green);">Bye 👋</p>
+
             </div>
 
         </article>
