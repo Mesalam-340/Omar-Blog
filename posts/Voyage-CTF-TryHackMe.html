@@ -254,16 +254,10 @@
                 <div class="article-meta">
                     <span class="badge">Mesalam_17</span>
                     <span>• TryHackMe</span>
-                    <span>• Aug 15, 2026</span>
                     <span>• CTF Writeup</span>
                 </div>
 
                 <div class="impact-highlights">
-                    <ul>
-                        <li>— TryHackMe Docker Escape</li>
-                        <li>— Python Deserialization</li>
-                        <li>— CAP_SYS_MODULE Privilege Escalation</li>
-                    </ul>
                 </div>
             </header>
 
@@ -489,7 +483,8 @@ valid_lft forever preferred_lft forever</div>
                     </tbody>
                 </table>
 
-                <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c07726576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
+                <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c077
+					26576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
 
                 <div class="code-box">import pickle
 import os
