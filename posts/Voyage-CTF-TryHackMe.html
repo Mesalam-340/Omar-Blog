@@ -372,7 +372,11 @@ http://10.67.166.123 [200 OK] Apache[2.4.58], Cookies[310c29008fc04f792e0bccb468
 
 /web.config.txt</div>
 
-                <p>Lets testing it<br>The first intesresting Find :<br><code>/administrator/includes/</code><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
+                <p>Lets testing it<br>it redirect<br><code>/administrator/includes/</code><div class="img-container">
+                    <img src="images/voyage3" alt="Proof of Concept Image 3">
+                </div><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><div class="img-container">
+                    <img src="images/voyage4" alt="Proof of Concept Image 4">
+                </div><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
 
                 <div class="terminal-box">User-agent: *
 
@@ -406,13 +410,15 @@ Disallow: /plugins/
 
 Disallow: /tmp/</div>
 
-                <p>Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
+                <p>Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><div class="img-container">
+                    <img src="images/voyage5" alt="Proof of Concept Image 3">
+                </div><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
 
                 <div class="terminal-box">[+] Detecting Joomla Version
 
 [++] Joomla 4.2.7</div>
 
-                <p>The tool brof that again<br>will the tool finish i will search about cves<br>I found CVE-2023-23752: Joomla Authentication Bypass<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<br><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br><br>2222 → successful<br><br>But i think iam on Docker container<br><br>Now this Confirms that we are in docker</p>
+                <p>The tool brof that again<br>will the tool finish i will search about cves<br>I found CVE-2023-23752: Joomla Authentication Bypass<b>https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT<b><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br><br>2222 → successful<br><br>But i think iam on Docker container<br><br>Now this Confirms that we are in docker</p>
 
                 <div class="terminal-box">root@f5eb774507f2:/# id
 
